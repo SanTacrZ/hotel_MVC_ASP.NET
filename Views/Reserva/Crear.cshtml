@@ -1,3 +1,4 @@
+@using biblioteca_hotel.Clases
 @{
     ViewData["Title"] = "Nueva Reserva";
 }
@@ -70,7 +71,7 @@
             }
         </div>
 
-        @if (ViewBag.Habitaciones != null && ((List<dynamic>)ViewBag.Habitaciones).Count == 0)
+        @if (ViewBag.Habitaciones != null && ViewBag.Habitaciones.Count == 0)
         {
             <div class="alert alert-warning">
                 No hay habitaciones disponibles en este momento.

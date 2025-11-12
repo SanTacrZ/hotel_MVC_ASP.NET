@@ -34,7 +34,6 @@ body {
 
 .main-content {
     flex: 1 0 auto;
-    min-height: calc(100vh - 200px);
 }
 
 .btn:focus, .btn:active:focus, .btn-link.nav-link:focus, .form-control:focus, .form-check-input:focus {
@@ -295,8 +294,6 @@ body {
     width: 100%;
     flex-shrink: 0;
     margin-top: auto;
-    position: relative;
-    z-index: 1;
 }
 
 header {
