@@ -41,7 +41,7 @@ print_step "Verificando repositorio Git..."
 if [ ! -d .git ]; then
     print_error "No estás en un repositorio Git. Inicializando..."
     git init
-    git remote add origin https://github.com/SanTacrZ/hotel_MVC_ASP.NET.git
+    git remote add origin https://github.com/SanTacrZ/HOTEL_MVC_ASP.NETgit
     print_success "Repositorio Git inicializado"
 else
     print_success "Repositorio Git detectado"
@@ -54,7 +54,7 @@ print_step "Verificando remote de GitHub..."
 
 if ! git remote get-url origin &> /dev/null; then
     print_warning "No hay remote configurado. Agregando origin..."
-    git remote add origin https://github.com/SanTacrZ/hotel_MVC_ASP.NET.git
+    git remote add origin https://github.com/SanTacrZ/HOTEL_MVC_ASP.NET.git
     print_success "Remote 'origin' agregado"
 else
     REMOTE_URL=$(git remote get-url origin)
