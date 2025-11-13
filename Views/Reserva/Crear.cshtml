@@ -145,16 +145,20 @@
                 return false;
             }
 
-            // Comparar fechas como strings en formato YYYY-MM-DD
-            const hoy = new Date().toISOString().split('T')[0];
+            // Obtener la fecha de hoy sin conversión UTC para evitar problemas de zona horaria
+            const ahora = new Date();
+            const hoy = new Date(ahora.getFullYear(), ahora.getMonth(), ahora.getDate())
+                .toISOString().split('T')[0];
 
+            // Permitir reservas desde HOY (inclusive)
             if (fechaEntradaInput < hoy) {
                 e.preventDefault();
                 alert('La fecha de entrada no puede ser anterior a hoy');
                 return false;
             }
 
-            if (fechaEntradaInput >= fechaSalidaInput) {
+            // La fecha de salida debe ser posterior a la fecha de entrada
+            if (fechaSalidaInput <= fechaEntradaInput) {
                 e.preventDefault();
                 alert('La fecha de salida debe ser posterior a la fecha de entrada');
                 return false;

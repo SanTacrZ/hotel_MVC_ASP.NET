@@ -1,0 +1,95 @@
+# Archivo de Huéspedes
+# Formato: TipoDocumento|NumeroDocumento|Nombre|Apellido|Telefono|Nacionalidad|Email
+# TipoDocumento: CC (Cédula Ciudadanía), CE (Cédula Extranjería), Pasaporte, TI (Tarjeta Identidad)
+
+# Huéspedes Colombianos
+CC|1012345678|Camila|Rojas|3101234567|Colombiana|camila.rojas@email.com
+CC|1023456789|Santiago|Herrera|3112345678|Colombiana|santiago.herrera@email.com
+CC|1034567890|Valentina|Castro|3123456789|Colombiana|valentina.castro@email.com
+CC|1045678901|Sebastián|Ramírez|3134567890|Colombiana|sebastian.ramirez@email.com
+CC|1056789012|Daniela|Moreno|3145678901|Colombiana|daniela.moreno@email.com
+CC|1067890123|Mateo|Jiménez|3156789012|Colombiana|mateo.jimenez@email.com
+TI|1098765432|Sofía|López|3167890123|Colombiana|sofia.lopez@email.com
+CC|1087654321|David|Torres|3178901234|Colombiana|david.torres@email.com
+CC|1076543210|Isabella|Vargas|3189012345|Colombiana|isabella.vargas@email.com
+CC|1065432109|Andrés|Mendoza|3190123456|Colombiana|andres.mendoza@email.com
+
+# Huéspedes Internacionales - Españoles
+Pasaporte|ESP123456|Pablo|García|3201234567|Española|pablo.garcia@email.es
+Pasaporte|ESP234567|Carmen|Fernández|3212345678|Española|carmen.fernandez@email.es
+Pasaporte|ESP345678|Javier|Martín|3223456789|Española|javier.martin@email.es
+Pasaporte|ESP456789|Elena|Sánchez|3234567890|Española|elena.sanchez@email.es
+
+# Huéspedes Internacionales - Estadounidenses
+Pasaporte|USA123456|Michael|Johnson|3245678901|Estadounidense|michael.johnson@email.com
+Pasaporte|USA234567|Emily|Williams|3256789012|Estadounidense|emily.williams@email.com
+Pasaporte|USA345678|Christopher|Brown|3267890123|Estadounidense|christopher.brown@email.com
+Pasaporte|USA456789|Jessica|Davis|3278901234|Estadounidense|jessica.davis@email.com
+Pasaporte|USA567890|Matthew|Miller|3289012345|Estadounidense|matthew.miller@email.com
+
+# Huéspedes Internacionales - Argentinos
+Pasaporte|ARG123456|Lucas|Fernández|3290123456|Argentina|lucas.fernandez@email.com.ar
+Pasaporte|ARG234567|Martina|González|3301234567|Argentina|martina.gonzalez@email.com.ar
+Pasaporte|ARG345678|Tomás|Rodríguez|3312345678|Argentina|tomas.rodriguez@email.com.ar
+
+# Huéspedes Internacionales - Mexicanos
+Pasaporte|MEX123456|Diego|Hernández|3323456789|Mexicana|diego.hernandez@email.com.mx
+Pasaporte|MEX234567|Valeria|López|3334567890|Mexicana|valeria.lopez@email.com.mx
+Pasaporte|MEX345678|Alejandro|Martínez|3345678901|Mexicana|alejandro.martinez@email.com.mx
+
+# Huéspedes Internacionales - Brasileños
+Pasaporte|BRA123456|Gabriel|Silva|3356789012|Brasileña|gabriel.silva@email.com.br
+Pasaporte|BRA234567|Mariana|Santos|3367890123|Brasileña|mariana.santos@email.com.br
+Pasaporte|BRA345678|Rafael|Oliveira|3378901234|Brasileña|rafael.oliveira@email.com.br
+
+# Huéspedes Internacionales - Chilenos
+Pasaporte|CHL123456|Benjamín|Muñoz|3389012345|Chilena|benjamin.munoz@email.cl
+Pasaporte|CHL234567|Francisca|Silva|3390123456|Chilena|francisca.silva@email.cl
+
+# Huéspedes Internacionales - Peruanos
+Pasaporte|PER123456|Rodrigo|Quispe|3401234567|Peruana|rodrigo.quispe@email.com.pe
+Pasaporte|PER234567|Lucía|Flores|3412345678|Peruana|lucia.flores@email.com.pe
+
+# Huéspedes Internacionales - Franceses
+Pasaporte|FRA123456|Pierre|Dubois|3423456789|Francesa|pierre.dubois@email.fr
+Pasaporte|FRA234567|Marie|Laurent|3434567890|Francesa|marie.laurent@email.fr
+
+# Huéspedes Internacionales - Alemanes
+Pasaporte|DEU123456|Hans|Schmidt|3445678901|Alemana|hans.schmidt@email.de
+Pasaporte|DEU234567|Anna|Müller|3456789012|Alemana|anna.muller@email.de
+
+# Huéspedes Internacionales - Italianos
+Pasaporte|ITA123456|Marco|Rossi|3467890123|Italiana|marco.rossi@email.it
+Pasaporte|ITA234567|Giulia|Romano|3478901234|Italiana|giulia.romano@email.it
+
+# Huéspedes Internacionales - Ingleses
+Pasaporte|GBR123456|James|Taylor|3489012345|Inglesa|james.taylor@email.co.uk
+Pasaporte|GBR234567|Emma|Wilson|3490123456|Inglesa|emma.wilson@email.co.uk
+
+# Huéspedes Internacionales - Canadienses
+Pasaporte|CAN123456|Ryan|Anderson|3501234567|Canadiense|ryan.anderson@email.ca
+Pasaporte|CAN234567|Olivia|Thomas|3512345678|Canadiense|olivia.thomas@email.ca
+
+# Huéspedes Internacionales - Japoneses
+Pasaporte|JPN123456|Takeshi|Yamamoto|3523456789|Japonesa|takeshi.yamamoto@email.jp
+Pasaporte|JPN234567|Yuki|Tanaka|3534567890|Japonesa|yuki.tanaka@email.jp
+
+# Huéspedes Internacionales - Coreanos
+Pasaporte|KOR123456|Min-Jun|Kim|3545678901|Coreana|minjun.kim@email.kr
+Pasaporte|KOR234567|Ji-Woo|Park|3556789012|Coreana|jiwoo.park@email.kr
+
+# Huéspedes Internacionales - Chinos
+Pasaporte|CHN123456|Wei|Chen|3567890123|China|wei.chen@email.cn
+Pasaporte|CHN234567|Li|Wang|3578901234|China|li.wang@email.cn
+
+# Huéspedes Extranjeros Residentes en Colombia
+CE|CE12345678|Roberto|Fernández|3589012345|Venezolana|roberto.fernandez@email.com
+CE|CE23456789|María|Pérez|3590123456|Venezolana|maria.perez@email.com
+CE|CE34567890|José|González|3601234567|Ecuatoriana|jose.gonzalez@email.com
+CE|CE45678901|Ana|Martínez|3612345678|Ecuatoriana|ana.martinez@email.com
+
+# Huéspedes VIP / Corporativos
+CC|52123456|Felipe|Aristizábal|3623456789|Colombiana|felipe.aristizabal@empresa.com
+Pasaporte|USA789012|Robert|Thompson|3634567890|Estadounidense|robert.thompson@corporation.com
+CC|52234567|Laura|Vélez|3645678901|Colombiana|laura.velez@empresa.com
+Pasaporte|ESP789012|Antonio|Ruiz|3656789012|Española|antonio.ruiz@company.es

@@ -6,6 +6,22 @@
 
 <h2>Detalles de Reserva #@Model.Id</h2>
 
+@if (TempData["Success"] != null)
+{
+    <div class="alert alert-success alert-dismissible fade show" role="alert">
+        <i class="bi bi-check-circle"></i> @TempData["Success"]
+        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+    </div>
+}
+
+@if (TempData["Error"] != null)
+{
+    <div class="alert alert-danger alert-dismissible fade show" role="alert">
+        <i class="bi bi-exclamation-triangle"></i> <strong>Error:</strong> @TempData["Error"]
+        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+    </div>
+}
+
 <div>
     <dl class="row">
         <dt class="col-sm-2">ID Reserva</dt>
@@ -47,7 +63,72 @@
     </dl>
 </div>
 
-<div>
+<div class="mt-4">
     <a asp-action="Index" class="btn btn-secondary">Volver a la Lista</a>
+
+    @if (Model.Estado?.Nombre == "Pendiente" || Model.Estado?.Nombre == "Confirmada")
+    {
+        var horasRestantes = (Model.FechaEntrada - DateTime.Now).TotalHours;
+        var puedeCancelar = horasRestantes >= 24;
+
+        @if (Model.Estado?.Nombre == "Pendiente")
+        {
+            <form asp-action="Confirmar" method="post" style="display:inline;">
+                <input type="hidden" name="id" value="@Model.Id" />
+                <button type="submit" class="btn btn-success">Confirmar Reserva</button>
+            </form>
+        }
+
+        @if (puedeCancelar)
+        {
+            <form asp-action="Cancelar" method="post" style="display:inline;"
+                  onsubmit="return confirm('¿Está seguro de cancelar esta reserva?');">
+                <input type="hidden" name="id" value="@Model.Id" />
+                <button type="submit" class="btn btn-danger">Cancelar Reserva</button>
+            </form>
+            <div class="alert alert-info mt-3">
+                <i class="bi bi-info-circle"></i>
+                Puede cancelar esta reserva. Tiempo hasta el check-in: <strong>@horasRestantes.ToString("F1") horas</strong>
+            </div>
+        }
+        else
+        {
+            <button type="button"
+                    class="btn btn-secondary"
+                    disabled
+                    title="No se puede cancelar con menos de 24 horas de anticipación">
+                Cancelar Reserva
+            </button>
+            <div class="alert alert-warning mt-3">
+                <i class="bi bi-exclamation-triangle"></i>
+                <strong>No se puede cancelar esta reserva.</strong><br>
+                Debe cancelar con al menos 24 horas de anticipación al check-in.<br>
+                Tiempo restante hasta el check-in: <strong>@Math.Max(0, horasRestantes).ToString("F1") horas</strong>
+            </div>
+        }
+    }
+    else if (Model.Estado?.Nombre == "Cancelada")
+    {
+        <div class="alert alert-danger mt-3">
+            <i class="bi bi-x-circle"></i>
+            Esta reserva ha sido <strong>cancelada</strong>.
+        </div>
+    }
 </div>
 
+<style>
+    .alert {
+        animation: slideIn 0.3s ease-out;
+    }
+
+    @keyframes slideIn {
+        from {
+            opacity: 0;
+            transform: translateY(-20px);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+</style>

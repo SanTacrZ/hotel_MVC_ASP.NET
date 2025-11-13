@@ -65,6 +65,7 @@ namespace hotel_web_final
             using (var scope = app.Services.CreateScope())
             {
                 var services = scope.ServiceProvider;
+                var logger = services.GetRequiredService<ILogger<Program>>();
 
                 var habitacionService = services.GetRequiredService<HabitacionService>();
                 habitacionService.InicializarHabitaciones();
@@ -80,16 +81,16 @@ namespace hotel_web_final
                     if (File.Exists(rutaClientes))
                     {
                         clienteService.Cargar(rutaClientes);
-                        Console.WriteLine($"Éxito: Clientes cargados desde {rutaClientes}");
+                        logger.LogInformation("Clientes cargados exitosamente desde {RutaArchivo}", rutaClientes);
                     }
                     else
                     {
-                        Console.WriteLine($"ADVERTENCIA: No se encontró el archivo de clientes en {rutaClientes}");
+                        logger.LogWarning("No se encontró el archivo de clientes en {RutaArchivo}", rutaClientes);
                     }
                 }
                 catch (Exception ex)
                 {
-                    Console.WriteLine($"Error al cargar clientes: {ex.Message}");
+                    logger.LogError(ex, "Error al cargar clientes desde archivo");
                 }
 
                 // 3. Cargar Huéspedes desde archivo
@@ -100,16 +101,16 @@ namespace hotel_web_final
                     if (File.Exists(rutaHuespedes))
                     {
                         huespedService.Cargar(rutaHuespedes);
-                        Console.WriteLine($"Éxito: Huéspedes cargados desde {rutaHuespedes}");
+                        logger.LogInformation("Huéspedes cargados exitosamente desde {RutaArchivo}", rutaHuespedes);
                     }
                     else
                     {
-                        Console.WriteLine($"ADVERTENCIA: No se encontró el archivo de huéspedes en {rutaHuespedes}");
+                        logger.LogWarning("No se encontró el archivo de huéspedes en {RutaArchivo}", rutaHuespedes);
                     }
                 }
                 catch (Exception ex)
                 {
-                    Console.WriteLine($"Error al cargar huéspedes: {ex.Message}");
+                    logger.LogError(ex, "Error al cargar huéspedes desde archivo");
                 }
             }
             

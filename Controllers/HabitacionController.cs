@@ -84,7 +84,7 @@ namespace hotel_web_final.Controllers
         [HttpPost]
         public IActionResult ReservarHabitacion(int habitacionId, string opcionCliente, int? clienteExistenteId,
             string? nuevoNombre, string? nuevoApellido, string? nuevoTipoDocumento, string? nuevoNumeroDocumento,
-            string? nuevoTelefono, string? nuevoEmail, DateTime fechaEntrada, DateTime fechaSalida, int numHuespedes)
+            string? nuevoTelefono, string? nuevoEmail, string fechaEntrada, string fechaSalida, int numHuespedes)
         {
             try
             {
@@ -135,11 +135,24 @@ namespace hotel_web_final.Controllers
                     clienteId = nuevoCliente.IdCliente;
                 }
 
+                // Parsear fechas usando solo la parte de fecha (sin hora)
+                DateTime fechaEntradaDate = DateTime.Parse(fechaEntrada).Date;
+                DateTime fechaSalidaDate = DateTime.Parse(fechaSalida).Date;
+
+                // Log para debugging
+                _logger.LogInformation($"Reserva rápida - Entrada recibida: {fechaEntrada}, Parseada: {fechaEntradaDate:yyyy-MM-dd}, Today: {DateTime.Today:yyyy-MM-dd}");
+
+                // Validar que no sea anterior a hoy usando DateTime.Today
+                if (fechaEntradaDate < DateTime.Today)
+                {
+                    throw new ArgumentException($"La fecha de entrada no puede ser anterior a hoy. Fecha seleccionada: {fechaEntradaDate:yyyy-MM-dd}, Hoy: {DateTime.Today:yyyy-MM-dd}");
+                }
+
                 // Crear la reserva con la habitación seleccionada
                 var reserva = _reservaService.CrearReserva(
                     clienteId,
-                    fechaEntrada,
-                    fechaSalida,
+                    fechaEntradaDate,
+                    fechaSalidaDate,
                     numHuespedes,
                     new List<int> { habitacionId },
                     null

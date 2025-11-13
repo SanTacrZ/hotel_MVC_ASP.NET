@@ -138,7 +138,7 @@ namespace hotel_web_final.Controllers
         }
 
         /// <summary>
-        /// Registra un consumo del minibar.
+        /// Registra un consumo del minibar (POST tradicional - mantener por compatibilidad).
         /// </summary>
         [HttpPost]
         public IActionResult RegistrarConsumo(int habitacionId, int productoId, int cantidad)
@@ -160,6 +160,42 @@ namespace hotel_web_final.Controllers
                 TempData["Error"] = ex.Message;
                 _logger.LogError(ex, "Error al registrar consumo");
                 return RedirectToAction(nameof(GestionarMinibar), new { habitacionId });
+            }
+        }
+
+        /// <summary>
+        /// Registra un consumo del minibar usando AJAX (sin recarga de página).
+        /// </summary>
+        [HttpPost]
+        public IActionResult RegistrarConsumoAjax(int habitacionId, int productoId, int cantidad)
+        {
+            try
+            {
+                if (cantidad <= 0)
+                {
+                    return Json(new { success = false, message = "La cantidad debe ser mayor a 0" });
+                }
+
+                _minibarService.RegistrarConsumo(habitacionId, productoId, cantidad);
+
+                // Obtener datos actualizados del minibar
+                var minibar = _minibarService.ObtenerMinibarPorHabitacion(habitacionId);
+                var costoTotal = _minibarService.ObtenerCostoTotalConsumos(habitacionId);
+
+                return Json(new {
+                    success = true,
+                    message = "Consumo registrado exitosamente",
+                    costoTotal = costoTotal,
+                    productos = minibar?.ProductosDisponibles?.Select(p => new {
+                        id = p.Id,
+                        stock = p.Stock
+                    })
+                });
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error al registrar consumo AJAX");
+                return Json(new { success = false, message = ex.Message });
             }
         }
 

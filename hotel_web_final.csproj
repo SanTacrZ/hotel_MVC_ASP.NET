@@ -7,6 +7,10 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="Castle.Core" Version="5.2.1" />
+  </ItemGroup>
+
+  <ItemGroup>
     <Reference Include="biblioteca_hotel">
       <HintPath>..\biblioteca_hotel\bin\Debug\biblioteca_hotel.dll</HintPath>
     </Reference>

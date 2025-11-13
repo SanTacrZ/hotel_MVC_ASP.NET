@@ -29,9 +29,11 @@
     </div>
 }
 
+<div id="alertContainer"></div>
+
 <div class="card mb-3">
     <div class="card-header bg-primary text-white">
-        <h4>Costo Total de Consumos: @ViewBag.CostoTotal.ToString("C")</h4>
+        <h4>Costo Total de Consumos: <span id="costoTotal">@ViewBag.CostoTotal.ToString("C")</span></h4>
     </div>
 </div>
 
@@ -56,17 +58,27 @@
 
                         @if (producto.Stock > 0)
                         {
-                            <form asp-action="RegistrarConsumo" method="post" class="d-inline">
-                                <input type="hidden" name="habitacionId" value="@ViewBag.HabitacionId" />
-                                <input type="hidden" name="productoId" value="@producto.Id" />
-                                <div class="input-group mb-2">
-                                    <input type="number" name="cantidad" class="form-control"
-                                           min="1" max="@producto.Stock" value="1" required />
-                                    <button type="submit" class="btn btn-primary">
-                                        Registrar Consumo
-                                    </button>
-                                </div>
-                            </form>
+                            <div class="input-group mb-2">
+                                <input type="number"
+                                       class="form-control cantidad-input"
+                                       data-producto-id="@producto.Id"
+                                       min="1"
+                                       max="@producto.Stock"
+                                       value="1"
+                                       id="cantidad-@producto.Id" />
+                                <button type="button"
+                                        class="btn btn-primary btn-registrar-consumo"
+                                        data-producto-id="@producto.Id"
+                                        data-producto-nombre="@producto.Nombre">
+                                    Registrar Consumo
+                                </button>
+                            </div>
+                            <div class="stock-info">
+                                <span class="badge stock-badge-@producto.Id @(producto.Stock > 3 ? "bg-success" : producto.Stock > 0 ? "bg-warning" : "bg-danger")"
+                                      id="stock-@producto.Id">
+                                    @producto.Stock unidades
+                                </span>
+                            </div>
                         }
                         else
                         {
@@ -87,6 +99,112 @@
     }
 </div>
 
+@section Scripts {
+<script>
+    const habitacionId = @ViewBag.HabitacionId;
+
+    // Registrar consumo con AJAX
+    document.querySelectorAll('.btn-registrar-consumo').forEach(button => {
+        button.addEventListener('click', async function() {
+            const productoId = this.getAttribute('data-producto-id');
+            const productoNombre = this.getAttribute('data-producto-nombre');
+            const cantidadInput = document.getElementById(`cantidad-${productoId}`);
+            const cantidad = parseInt(cantidadInput.value);
+
+            if (cantidad <= 0) {
+                mostrarAlerta('La cantidad debe ser mayor a 0', 'danger');
+                return;
+            }
+
+            // Deshabilitar botón mientras procesa
+            this.disabled = true;
+            this.innerHTML = '<span class="spinner-border spinner-border-sm"></span> Procesando...';
+
+            try {
+                const response = await fetch('@Url.Action("RegistrarConsumoAjax", "Recepcion")', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/x-www-form-urlencoded',
+                    },
+                    body: `habitacionId=${habitacionId}&productoId=${productoId}&cantidad=${cantidad}`
+                });
+
+                const data = await response.json();
+
+                if (data.success) {
+                    // Actualizar el costo total
+                    document.getElementById('costoTotal').textContent =
+                        new Intl.NumberFormat('es-CO', { style: 'currency', currency: 'COP' }).format(data.costoTotal);
+
+                    // Actualizar stocks
+                    if (data.productos) {
+                        data.productos.forEach(p => {
+                            const stockBadge = document.getElementById(`stock-${p.id}`);
+                            const cantidadInputEl = document.getElementById(`cantidad-${p.id}`);
+
+                            if (stockBadge) {
+                                stockBadge.textContent = `${p.stock} unidades`;
+
+                                // Actualizar color del badge
+                                stockBadge.className = `badge stock-badge-${p.id}`;
+                                if (p.stock > 3) {
+                                    stockBadge.classList.add('bg-success');
+                                } else if (p.stock > 0) {
+                                    stockBadge.classList.add('bg-warning');
+                                } else {
+                                    stockBadge.classList.add('bg-danger');
+                                }
+                            }
+
+                            if (cantidadInputEl) {
+                                cantidadInputEl.max = p.stock;
+                                if (p.stock === 0) {
+                                    cantidadInputEl.value = 0;
+                                    cantidadInputEl.disabled = true;
+                                } else {
+                                    cantidadInputEl.value = 1;
+                                }
+                            }
+                        });
+                    }
+
+                    // Resetear cantidad a 1
+                    cantidadInput.value = 1;
+
+                    mostrarAlerta(`${productoNombre} registrado exitosamente`, 'success');
+                } else {
+                    mostrarAlerta(data.message || 'Error al registrar el consumo', 'danger');
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                mostrarAlerta('Error de conexión al registrar el consumo', 'danger');
+            } finally {
+                // Rehabilitar botón
+                this.disabled = false;
+                this.innerHTML = 'Registrar Consumo';
+            }
+        });
+    });
+
+    // Función para mostrar alertas
+    function mostrarAlerta(mensaje, tipo) {
+        const alertContainer = document.getElementById('alertContainer');
+        const alert = document.createElement('div');
+        alert.className = `alert alert-${tipo} alert-dismissible fade show`;
+        alert.innerHTML = `
+            ${mensaje}
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        `;
+        alertContainer.appendChild(alert);
+
+        // Auto-cerrar después de 3 segundos
+        setTimeout(() => {
+            alert.remove();
+        }, 3000);
+    }
+</script>
+}
+
 <style>
     .card {
         height: 100%;
@@ -100,5 +218,17 @@
 
     .input-group input[type="number"] {
         max-width: 80px;
+    }
+
+    .stock-info {
+        margin-top: 0.5rem;
+    }
+
+    #alertContainer {
+        position: fixed;
+        top: 20px;
+        right: 20px;
+        z-index: 9999;
+        max-width: 400px;
     }
 </style>

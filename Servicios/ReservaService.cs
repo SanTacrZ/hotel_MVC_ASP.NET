@@ -25,13 +25,25 @@ namespace hotel_web_final.Servicios
             if (cliente == null)
                 throw new Exception($"Cliente con ID {clienteId} no encontrado");
 
+            // Asegurar que las fechas sean solo fecha (sin hora) usando DateTime.Today como referencia
             var fechaHoy = DateTime.Today;
+            var fechaEntradaNormalizada = fechaEntrada.Date;
+            var fechaSalidaNormalizada = fechaSalida.Date;
 
-            if (fechaEntrada.Date < fechaHoy)
-                throw new Exception("La fecha de entrada no puede ser anterior a hoy");
+            // Permitir reservas desde HOY (inclusive) en adelante
+            // Usar < (menor que), NO <= (menor o igual), para permitir TODAY
+            if (fechaEntradaNormalizada < fechaHoy)
+            {
+                throw new Exception($"La fecha de entrada no puede ser anterior a hoy. " +
+                    $"Fecha entrada: {fechaEntradaNormalizada:yyyy-MM-dd}, " +
+                    $"Hoy: {fechaHoy:yyyy-MM-dd}");
+            }
 
-            if (fechaEntrada.Date >= fechaSalida.Date)
-                throw new Exception("La fecha de entrada debe ser anterior a la fecha de salida");
+            // La fecha de salida debe ser al menos un día después de la entrada
+            if (fechaSalidaNormalizada <= fechaEntradaNormalizada)
+            {
+                throw new Exception("La fecha de salida debe ser posterior a la fecha de entrada");
+            }
 
             var reserva = new Reserva
             {
@@ -121,6 +133,13 @@ namespace hotel_web_final.Servicios
             var reserva = BuscarPorId(id);
             if (reserva == null)
                 throw new Exception($"Reserva con ID {id} no encontrada");
+
+            // Validar que la cancelación se haga con al menos 24 horas de anticipación
+            var horasAnticipacion = (reserva.FechaEntrada - DateTime.Now).TotalHours;
+            if (horasAnticipacion < 24)
+            {
+                throw new Exception($"No se puede cancelar la reserva. Debe cancelar con al menos 24 horas de anticipación al check-in. Tiempo restante: {Math.Max(0, horasAnticipacion):F1} horas.");
+            }
 
             reserva.CancelarReserva();
             foreach (var habitacion in reserva.Habitaciones)

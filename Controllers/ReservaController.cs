@@ -41,7 +41,7 @@ namespace hotel_web_final.Controllers
         }
 
         [HttpPost]
-        public IActionResult Crear(int clienteId, DateTime fechaEntrada, DateTime fechaSalida, 
+        public IActionResult Crear(int clienteId, string fechaEntrada, string fechaSalida,
             int numHuespedes, int[] habitacionIds, int[]? huespedIds)
         {
             try
@@ -55,10 +55,23 @@ namespace hotel_web_final.Controllers
                     return View();
                 }
 
+                // Parsear fechas usando solo la parte de fecha (sin hora)
+                DateTime fechaEntradaDate = DateTime.Parse(fechaEntrada).Date;
+                DateTime fechaSalidaDate = DateTime.Parse(fechaSalida).Date;
+
+                // Log para debugging
+                _logger.LogInformation($"Creando reserva - Entrada recibida: {fechaEntrada}, Parseada: {fechaEntradaDate:yyyy-MM-dd}, Today: {DateTime.Today:yyyy-MM-dd}");
+
+                // Validar que no sea anterior a hoy usando DateTime.Today
+                if (fechaEntradaDate < DateTime.Today)
+                {
+                    throw new ArgumentException($"La fecha de entrada no puede ser anterior a hoy. Fecha seleccionada: {fechaEntradaDate:yyyy-MM-dd}, Hoy: {DateTime.Today:yyyy-MM-dd}");
+                }
+
                 var reserva = _reservaService.CrearReserva(
                     clienteId,
-                    fechaEntrada,
-                    fechaSalida,
+                    fechaEntradaDate,
+                    fechaSalidaDate,
                     numHuespedes,
                     habitacionIds.ToList(),
                     huespedIds?.ToList()
@@ -118,13 +131,14 @@ namespace hotel_web_final.Controllers
             try
             {
                 _reservaService.CancelarReserva(id);
+                TempData["Success"] = "Reserva cancelada exitosamente";
                 return RedirectToAction(nameof(Index));
             }
             catch (Exception ex)
             {
-                ViewBag.Error = ex.Message;
+                TempData["Error"] = ex.Message;
                 _logger.LogError(ex, "Error al cancelar reserva");
-                return RedirectToAction(nameof(Index));
+                return RedirectToAction(nameof(Detalles), new { id });
             }
         }
     }
